@@ -1,0 +1,49 @@
+# Build aset frontend Vite
+FROM node:22-alpine AS frontend
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install --no-audit --no-fund
+
+COPY vite.config.js ./
+COPY resources ./resources
+COPY public ./public
+RUN npm run build
+
+
+# Jalankan Laravel dengan FrankenPHP (PHP + Caddy)
+FROM dunglas/frankenphp:1-php8.4-alpine AS app
+WORKDIR /app
+
+# Ekstensi PHP yang umum diperlukan Laravel dan koneksi database
+RUN install-php-extensions pdo_mysql pdo_sqlite mbstring bcmath gd intl zip
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# File .env tidak disertakan; konfigurasi production diatur melalui Vercel
+COPY . .
+
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader \
+    && mkdir -p storage/framework/cache/data \
+               storage/framework/sessions \
+               storage/framework/views \
+               storage/logs \
+               bootstrap/cache \
+    && chmod -R ug+rwX storage bootstrap/cache
+
+# Hasil build Vite harus tersedia di public/build
+COPY --from=frontend /app/public/build ./public/build
+
+COPY Caddyfile /etc/caddy/Caddyfile
+
+ENV PORT=80 \
+    APP_ENV=production \
+    APP_DEBUG=false \
+    LOG_CHANNEL=stderr \
+    CACHE_STORE=array \
+    SESSION_DRIVER=cookie \
+    QUEUE_CONNECTION=sync
+
+EXPOSE 80
+
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
