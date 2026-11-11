@@ -29,7 +29,7 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        <a class="nav-link dropdown-toggle" href="/profilsekolah" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             Profil
                         </a>
@@ -71,7 +71,7 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        <a class="nav-link dropdown-toggle" href="/pengumuman" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             Berita
                         </a>
@@ -207,7 +207,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="float-start">Kegiatan Terbaru</h5>
-                        <button type="button" class="btn btn-outline-primary float-end">Lihat Semua Kegiatan <svg
+                        <button type="button" class="btn btn-outline-primary float-end" href="/pengumuman">Lihat Semua Kegiatan <svg
                                 xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-arrow-right-short" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
